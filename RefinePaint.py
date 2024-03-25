@@ -47,7 +47,7 @@ def save_model_in_parts(model, path, parts=5):
         print(f"Saved {part_path}")
 
 
-def load_model_from_parts(model, path, parts=5):
+def load_model_state_from_parts(path, parts=5):
     # Reconstruct the state dictionary from parts
     state_dict = {}
     for i in range(parts):
@@ -55,9 +55,8 @@ def load_model_from_parts(model, path, parts=5):
         part_dict = torch.load(part_path)
         state_dict.update(part_dict)
 
-    # Load the state dictionary into the model
-    model.load_state_dict(state_dict)
-    print("Model loaded from parts successfully.")
+    return state_dict
+
 
 @dataclasses.dataclass
 class Config:
@@ -70,17 +69,6 @@ class Config:
     pretrained_path: str = None
     beta: float = 0.1
 
-
-def top_p(logits, thres = 0.9):
-    sorted_logits, sorted_indices = torch.sort(logits, descending=True)
-    cum_probs = torch.cumsum(F.softmax(sorted_logits, dim=-1), dim=-1)
-
-    sorted_indices_to_remove = cum_probs > (1 - thres)
-    sorted_indices_to_remove[:, 1:] = sorted_indices_to_remove[:, :-1].clone()
-    sorted_indices_to_remove[:, 0] = 0
-
-    sorted_logits[sorted_indices_to_remove] = float('-inf')
-    return sorted_logits.scatter(1, sorted_indices, sorted_logits)
 
 
 
@@ -202,14 +190,16 @@ def plot_song_metrics(data, show, path_save=None):
 
 def get_experiment(device):
     config = Config(max_seq_len=512, pad_token_id=0, batch_size=1, max_epochs=10, num_tokens=181, exclude_ctx=True)
-    save_model_in_parts(generator, 'checkpoints/inpainting', parts=5)
-    checkpoint_path = 'checkpoints/entire_inpainting.ckpt'
-    generator = TransformerInpainting.load_from_checkpoint(checkpoint_path, config=config, len_dataset=1, vocab={},
-                                                    lr=0)
-    checkpoint_path = 'checkpoints/entire_feedback.ckpt'
-    feedback = TransformerClassifier.load_from_checkpoint(
-        checkpoint_path, max_epochs=0, lr=0, len_dataset=1, batch_size=1, embedding_dim=512, layers=6,
-        dropout=0.1, ctx_tokens=True, weighted=True, max_seq_len=512, clf_size=181, num_tokens=181)
+    state_dict = load_model_state_from_parts('checkpoints/inpainting', parts=5)
+    generator = TransformerInpainting(config=config, len_dataset=1, vocab={},
+                                                    lr=0, batch_size=1)
+    generator.load_state_dict(state_dict)
+
+    state_dict = load_model_state_from_parts('checkpoints/feedback', parts=5)
+    # state_dict = {k.replace("transformer.", ""): v for k, v in state_dict.items()}
+    feedback = TransformerClassifier(embedding_dim=512, layers=6, dropout=0.1, ctx_tokens=True, weighted=True,
+                                     max_seq_len=512, clf_size=181, num_tokens=181)
+    feedback.load_state_dict(state_dict)
 
     generator.to(device)
     generator.eval()
@@ -219,6 +209,20 @@ def get_experiment(device):
     # save_model_in_parts(generator, 'checkpoints/inpainting', parts=5)
     # save_model_in_parts(generator, 'checkpoints/feedback', parts=5)
     return generator, feedback
+
+# def get_experiment(device):
+#     config = Config(max_seq_len=512, pad_token_id=0, batch_size=1, max_epochs=10, num_tokens=181, exclude_ctx=True)
+#     checkpoint_path = 'checkpoints/PIA_piano_efficient_v2/best-checkpoint.ckpt'
+#     generator = TransformerInpainting.load_from_checkpoint(checkpoint_path, config=config, len_dataset=1, vocab={},
+#                                                     lr=0)
+#     checkpoint_path = 'checkpoints/piano_5_million/noisyreal/best-checkpoint.ckpt'
+#     tokencritic = TransformerClassifier.load_from_checkpoint(
+#         checkpoint_path, max_epochs=0, lr=0, len_dataset=1, batch_size=1, embedding_dim=512, layers=6,
+#         dropout=0.1, ctx_tokens=True, weighted=True, max_seq_len=512, clf_size=181, num_tokens=181)
+#
+#     save_model_in_parts(generator, 'checkpoints/inpainting', parts=5)
+#     save_model_in_parts(tokencritic, 'checkpoints/feedback', parts=5)
+
 
 
 def save_json(data, path):
@@ -537,11 +541,11 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Process some parameters for music composition.")
 
     # Add arguments with default values
-    parser.add_argument("--path", type=str, default="example.mid", help="Path to the MIDI file")
-    parser.add_argument("--bar_begin", type=int, default=5, help="Starting bar number")
-    parser.add_argument("--bar_end", type=int, default=6, help="Ending bar number")
+    parser.add_argument("--path", type=str, default="genis/version3_1.mid", help="Path to the MIDI file")
+    parser.add_argument("--bar_begin", type=int, default=4, help="Starting bar number")
+    parser.add_argument("--bar_end", type=int, default=8, help="Ending bar number")
     parser.add_argument("--confidence_about_your_composition", type=int, default=0, help="Confidence level about the composition")
-    parser.add_argument("--human_in_the_loop", action='store_true', default=False, help="Include human in the loop processing")
+    parser.add_argument("--human_in_the_loop", action='store_true', default=True, help="Include human in the loop processing")
     parser.add_argument("--only_human", action='store_true', default=False, help="Use only human-generated compositions")
 
     # Parse the arguments
