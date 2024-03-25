@@ -18,10 +18,33 @@ RefinPaint is a cutting-edge tool designed to revolutionize music generation and
 - `InpaintingModel.py`: Contains the inpainting model used for generating music patches.
 - `FeedbackModel.py`: Includes the feedback model for evaluating music elements and providing suggestions for improvement.
 - `RefinPaint.py`: The main algorithm. It orchestrates the feedback and inpainting processes and interacts with the user through a command-line interface.
+- `chekpoints/`: weights of the inpainting model and feedback models.
 
 ## Installation
+### Prerequisites
 
-TODO
+- Python 3.6 or newer
+
+- Pip
+
+
+
+### Installation
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/anonymous/anonymous.git
+   ```
+   
+2. Install dependencies:
+   ```sh
+   pip install -r requirements.txt
+   ```
+
+3. Install commandline musescore in linux:
+   ```sh
+   sudo apt-get install musescore
+   ```
 
 ## Usage
 To run RefinPaint, use the following command-line interface:
@@ -41,8 +64,8 @@ python RefinPaint.py --path <path_to_midi_file> --bar_begin <start_bar> --bar_en
 - `--bar_begin`: Starting bar number.
 - `--bar_end`: Ending bar number.
 - `--confidence_about_your_composition`: Confidence level about the composition (0-10).
-- `--human_in_the_loop`: Include human in the loop processing (default: False).
-- `--only_human`: Use only human-generated compositions (default: False).
+- `--human_in_the_loop`: Include human in the loop processing (default: False). You can add red notes that you want to inpaint and then save the file in `proofreading` directory.
+- `--only_human`: Use only human-generated compositions (default: False). 
 
 For a detailed explanation of each argument, refer to the `parse_arguments` function within `RefinPaint.py`.
 
