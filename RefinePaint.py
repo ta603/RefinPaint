@@ -188,38 +188,38 @@ def plot_song_metrics(data, show, path_save=None):
     return path_save
 
 
-# def get_experiment(device):
-#     config = Config(max_seq_len=512, pad_token_id=0, batch_size=1, max_epochs=10, num_tokens=181, exclude_ctx=True)
-#     state_dict = load_model_state_from_parts('checkpoints/inpainting', parts=5)
-#     generator = TransformerInpainting(config=config, len_dataset=1, vocab={},
-#                                                     lr=0, batch_size=1)
-#     generator.load_state_dict(state_dict)
-#
-#     state_dict = load_model_state_from_parts('checkpoints/feedback', parts=5)
-#     # state_dict = {k.replace("transformer.", ""): v for k, v in state_dict.items()}
-#     feedback = TransformerClassifier(embedding_dim=512, layers=6, dropout=0.1, ctx_tokens=True, weighted=True,
-#                                      max_seq_len=512, clf_size=181, num_tokens=181)
-#     feedback.load_state_dict(state_dict)
-#
-#     generator.to(device)
-#     generator.eval()
-#
-#     feedback.to(device)
-#     feedback.eval()
-#     return generator, feedback
-
-
 def get_experiment(device):
     config = Config(max_seq_len=512, pad_token_id=0, batch_size=1, max_epochs=10, num_tokens=181, exclude_ctx=True)
-    checkpoint_path = 'checkpoints/PIA_piano_efficient_v2/best-checkpoint.ckpt'
-    generator = TransformerInpainting.load_from_checkpoint(checkpoint_path, config=config, len_dataset=1, vocab={},
-                                                    lr=0)
-    checkpoint_path = 'checkpoints/piano_5_million/noisyreal/best-checkpoint.ckpt'
-    tokencritic = TransformerClassifier.load_from_checkpoint(
-        checkpoint_path, max_epochs=0, lr=0, len_dataset=1, batch_size=1, embedding_dim=512, layers=6,
-        dropout=0.1, ctx_tokens=True, weighted=True, max_seq_len=512, clf_size=181, num_tokens=181)
-    save_model_in_parts(generator, 'checkpoints/inpainting', parts=5)
-    save_model_in_parts(tokencritic, 'checkpoints/feedback', parts=5)
+    state_dict = load_model_state_from_parts('checkpoints/inpainting', parts=5)
+    generator = TransformerInpainting(config=config, len_dataset=1, vocab={},
+                                                    lr=0, batch_size=1)
+    generator.load_state_dict(state_dict)
+
+    state_dict = load_model_state_from_parts('checkpoints/feedback', parts=5)
+    # state_dict = {k.replace("transformer.", ""): v for k, v in state_dict.items()}
+    feedback = TransformerClassifier(embedding_dim=512, layers=6, dropout=0.1, ctx_tokens=True, weighted=True,
+                                     max_seq_len=512, clf_size=181, num_tokens=181)
+    feedback.load_state_dict(state_dict)
+
+    generator.to(device)
+    generator.eval()
+
+    feedback.to(device)
+    feedback.eval()
+    return generator, feedback
+
+
+# def get_experiment(device):
+#     config = Config(max_seq_len=512, pad_token_id=0, batch_size=1, max_epochs=10, num_tokens=181, exclude_ctx=True)
+#     checkpoint_path = 'checkpoints/PIA_piano_efficient_v2/best-checkpoint.ckpt'
+#     generator = TransformerInpainting.load_from_checkpoint(checkpoint_path, config=config, len_dataset=1, vocab={},
+#                                                     lr=0)
+#     checkpoint_path = 'checkpoints/piano_5_million/noisyreal/best-checkpoint.ckpt'
+#     tokencritic = TransformerClassifier.load_from_checkpoint(
+#         checkpoint_path, max_epochs=0, lr=0, len_dataset=1, batch_size=1, embedding_dim=512, layers=6,
+#         dropout=0.1, ctx_tokens=True, weighted=True, max_seq_len=512, clf_size=181, num_tokens=181)
+#     save_model_in_parts(generator, 'checkpoints/inpainting', parts=5)
+#     save_model_in_parts(tokencritic, 'checkpoints/feedback', parts=5)
 
 
 
