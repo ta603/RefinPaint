@@ -188,25 +188,38 @@ def plot_song_metrics(data, show, path_save=None):
     return path_save
 
 
+# def get_experiment(device):
+#     config = Config(max_seq_len=512, pad_token_id=0, batch_size=1, max_epochs=10, num_tokens=181, exclude_ctx=True)
+#     state_dict = load_model_state_from_parts('checkpoints/inpainting', parts=5)
+#     generator = TransformerInpainting(config=config, len_dataset=1, vocab={},
+#                                                     lr=0, batch_size=1)
+#     generator.load_state_dict(state_dict)
+#
+#     state_dict = load_model_state_from_parts('checkpoints/feedback', parts=5)
+#     # state_dict = {k.replace("transformer.", ""): v for k, v in state_dict.items()}
+#     feedback = TransformerClassifier(embedding_dim=512, layers=6, dropout=0.1, ctx_tokens=True, weighted=True,
+#                                      max_seq_len=512, clf_size=181, num_tokens=181)
+#     feedback.load_state_dict(state_dict)
+#
+#     generator.to(device)
+#     generator.eval()
+#
+#     feedback.to(device)
+#     feedback.eval()
+#     return generator, feedback
+
+
 def get_experiment(device):
     config = Config(max_seq_len=512, pad_token_id=0, batch_size=1, max_epochs=10, num_tokens=181, exclude_ctx=True)
-    state_dict = load_model_state_from_parts('checkpoints/inpainting', parts=5)
-    generator = TransformerInpainting(config=config, len_dataset=1, vocab={},
-                                                    lr=0, batch_size=1)
-    generator.load_state_dict(state_dict)
-
-    state_dict = load_model_state_from_parts('checkpoints/feedback', parts=5)
-    # state_dict = {k.replace("transformer.", ""): v for k, v in state_dict.items()}
-    feedback = TransformerClassifier(embedding_dim=512, layers=6, dropout=0.1, ctx_tokens=True, weighted=True,
-                                     max_seq_len=512, clf_size=181, num_tokens=181)
-    feedback.load_state_dict(state_dict)
-
-    generator.to(device)
-    generator.eval()
-
-    feedback.to(device)
-    feedback.eval()
-    return generator, feedback
+    checkpoint_path = 'checkpoints/PIA_piano_efficient_v2/best-checkpoint.ckpt'
+    generator = TransformerInpainting.load_from_checkpoint(checkpoint_path, config=config, len_dataset=1, vocab={},
+                                                    lr=0)
+    checkpoint_path = 'checkpoints/piano_5_million/noisyreal/best-checkpoint.ckpt'
+    tokencritic = TransformerClassifier.load_from_checkpoint(
+        checkpoint_path, max_epochs=0, lr=0, len_dataset=1, batch_size=1, embedding_dim=512, layers=6,
+        dropout=0.1, ctx_tokens=True, weighted=True, max_seq_len=512, clf_size=181, num_tokens=181)
+    save_model_in_parts(generator, 'checkpoints/inpainting', parts=5)
+    save_model_in_parts(tokencritic, 'checkpoints/feedback', parts=5)
 
 
 
@@ -526,11 +539,11 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Process some parameters for music composition.")
 
     # Add arguments with default values
-    parser.add_argument("--path", type=str, default="andres3.mid", help="Path to the MIDI file")
+    parser.add_argument("--path", type=str, default="example.mid", help="Path to the MIDI file")
     parser.add_argument("--bar_begin", type=int, default=3, help="Starting bar number")
     parser.add_argument("--bar_end", type=int, default=5, help="Ending bar number")
     parser.add_argument("--confidence_about_your_composition", type=int, default=6, help="Confidence level about the composition")
-    parser.add_argument("--human_in_the_loop", action='store_true', default=True, help="Include human in the loop processing")
+    parser.add_argument("--human_in_the_loop", action='store_true', default=False, help="Include human in the loop processing")
     parser.add_argument("--only_human", action='store_true', default=False, help="Use only human-generated compositions")
 
     # Parse the arguments
