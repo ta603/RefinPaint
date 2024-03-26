@@ -110,70 +110,47 @@ def get_mask_saved_file(path, song_ids, previous_mask, ids2tokens):
 
 def plot_original(song_ids, tokenizer, path, multi=False):
 
-    if not multi:
-        remiplusplus_tokens = TokSequence(ids=song_ids.tolist())
-        instrument, t_changes = tokenizer.tokens_to_track(remiplusplus_tokens)
-        midi = MidiFile(ticks_per_beat=384)
+    remiplusplus_tokens = TokSequence(ids=song_ids.tolist())
+    instrument, t_changes = tokenizer.tokens_to_track(remiplusplus_tokens)
+    midi = MidiFile(ticks_per_beat=384)
 
-        midi.instruments = []
-        midi.instruments.append(instrument)
+    midi.instruments = []
+    midi.instruments.append(instrument)
 
-        midi.tempo_changes = t_changes
-        # midi.time_signature_changes = time_signature_changes
-        midi.max_tick = max(
-            [
-                max([note.end for note in track.notes] + [0]) if len(track.notes) > 0 else 0
-                for track in midi.instruments
-            ]
-        )
-        midi.dump(path + ".mid")
-    else:
-        song_ids = remove_drum_from_sequence(song_ids.tolist(), tokenizer)
-        remiplusplus_tokens = TokSequence(ids=song_ids)
-        midi = tokenizer.tokens_to_midi(remiplusplus_tokens)
-        midi.dump(path + ".mid")
+    midi.tempo_changes = t_changes
+    # midi.time_signature_changes = time_signature_changes
+    midi.max_tick = max(
+        [
+            max([note.end for note in track.notes] + [0]) if len(track.notes) > 0 else 0
+            for track in midi.instruments
+        ]
+    )
+    midi.dump(path + ".mid")
+
 
     os.system(f"mscore3 {path}.mid -o {path}.mscz")
     os.system(f"mscore3 {path}.mscz")
 
 
-def remove_drum_from_sequence(sequence, tokenizer):
-    token_drum = 181
-    position_ids = [k for k, v in tokenizer.vocab.items() if "Position" in k]
-    for ii, _ in enumerate(sequence):
-        if sequence[ii] == token_drum:
-            if ii - 1 < len(sequence) and sequence[ii - 1] in position_ids:
-                sequence[ii - 1] = 0
-            sequence[ii] = 0
-            if ii + 1 < len(sequence) < ii + 1:
-                sequence[ii + 1] = 0
-            if ii + 2 < len(sequence):
-                sequence[ii + 2] = 0
-    return sequence
 
 
 
 def create_MIDI(tokenizer, path, randint, generated_ids, song_mask, ids2tokens, it=0, multi=False, show=True):
-    if multi:
-        generated_ids = remove_drum_from_sequence(generated_ids, tokenizer)
-        remiplusplus_tokens = TokSequence(ids=generated_ids)
-        midi = tokenizer.tokens_to_midi(remiplusplus_tokens)
-    else:
-        remiplusplus_tokens = TokSequence(ids=generated_ids)
-        instrument, t_changes = tokenizer.tokens_to_track(remiplusplus_tokens)
-        midi = MidiFile(ticks_per_beat=384)
+    remiplusplus_tokens = TokSequence(ids=generated_ids)
+    instrument, t_changes = tokenizer.tokens_to_track(remiplusplus_tokens)
+    midi = MidiFile(ticks_per_beat=384)
 
-        midi.instruments = []
-        midi.instruments.append(instrument)
+    midi.instruments = []
+    midi.instruments.append(instrument)
 
-        midi.tempo_changes = t_changes
-        # midi.time_signature_changes = time_signature_changes
-        midi.max_tick = max(
-            [
-                max([note.end for note in track.notes] + [0]) if len(track.notes) > 0 else 0
-                for track in midi.instruments
-            ]
-        )
+    midi.tempo_changes = t_changes
+    # midi.time_signature_changes = time_signature_changes
+    midi.max_tick = max(
+        [
+            max([note.end for note in track.notes] + [0]) if len(track.notes) > 0 else 0
+            for track in midi.instruments
+        ]
+    )
 
     midi.dump(path)
     # os.system(f"mscore3 {path}")
@@ -219,24 +196,6 @@ def create_MIDI(tokenizer, path, randint, generated_ids, song_mask, ids2tokens, 
         os.system(f"mscore3 {musicxml_path}")
 
 
-def remove_drum(path):
-    # Load the MIDI file
-    from mido import MidiFile
-    mid = MidiFile(path)
-
-    # Create a new MIDI file without the drum track
-    new_mid = MidiFile()
-
-    for i, track in enumerate(mid.tracks):
-        # Check if the current track is the 10th one
-        # Note: In programming, lists are zero-based, so track 10 is index 9
-        if i != 9:
-            new_mid.tracks.append(track)
-
-    # Save the new MIDI file without the drum track
-    path = path.replace(".mid", "_nodrum.mid")
-    new_mid.save(path)
-
 
 def save_midi_piano(song_ids, tokenizer, path):
     try:
@@ -261,12 +220,6 @@ def save_midi_piano(song_ids, tokenizer, path):
         return None
 
 
-def save_midi_multi(song_ids, tokenizer, path):
-    remiplusplus_tokens = TokSequence(ids=song_ids)
-    midi = tokenizer.tokens_to_midi(remiplusplus_tokens)
-    midi.dump(path)
-    os.system(f"mscore3 {path}")
-    return path
 
 def strm2map(strm):
     import music21

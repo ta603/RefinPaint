@@ -15,7 +15,7 @@ Our experimental results showcase RefinPaint's effectiveness in both inpainting 
 RefinPaint is a cutting-edge tool designed to revolutionize music generation and editing. By facilitating an iterative refinement process, it aims to enhance the collaboration between humans and machines in the art of composition. This tool is perfect for composers, music producers, and anyone interested in exploring the boundaries of creative music generation.
 
 ### Code Structure
-- `InpaintingModel.py`: Contains the inpainting model used for generating music patches.
+- `InpaintingModel.py`: Contains the inpainting model used for generating music fragments.
 - `FeedbackModel.py`: Includes the feedback model for evaluating music elements and providing suggestions for improvement.
 - `RefinPaint.py`: The main algorithm. It orchestrates the feedback and inpainting processes and interacts with the user through a command-line interface.
 - `chekpoints/`: weights of the inpainting model and feedback models.
@@ -64,7 +64,7 @@ python RefinPaint.py --path <path_to_midi_file> --bar_begin <start_bar> --bar_en
 - `--bar_begin`: Starting bar number.
 - `--bar_end`: Ending bar number.
 - `--confidence_about_your_composition`: Confidence level about the composition (0-10).
-- `--human_in_the_loop`: Include human in the loop processing (default: False). You can add red notes that you want to inpaint and then save the file in `proofreading` directory.
+- `--human_in_the_loop`: Include human in the loop processing (default: False). You can add red notes that you want to inpaint in the heatmap and then save the file in `proofreading` directory. Further instructions will be added after acceptance.
 - `--only_human`: Use only human-generated compositions (default: False). 
 
 For a detailed explanation of each argument, refer to the `parse_arguments` function within `RefinPaint.py`.

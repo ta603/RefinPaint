@@ -161,10 +161,3 @@ class TransformerInpainting(TransformerBase):
     def inference(self, x, tgt, conditioning_mask, idx, enc=None):
         output = self.transformer.inference(x, tgt=tgt, idx=idx, conditioning_mask=conditioning_mask, enc=enc)
         return output
-
-
-
-
-
-
-

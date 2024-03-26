@@ -98,9 +98,3 @@ class TransformerClassifier(pl.LightningModule):
         # linear layer
         x = self.clf(x)
         return x.squeeze(-1)
-
-
-
-
-
-
