@@ -539,10 +539,10 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Process some parameters for music composition.")
 
     # Add arguments with default values
-    parser.add_argument("--path", type=str, default="example.mid", help="Path to the MIDI file")
+    parser.add_argument("--path", type=str, default="video/fake.mid", help="Path to the MIDI file")
     parser.add_argument("--bar_begin", type=int, default=3, help="Starting bar number")
-    parser.add_argument("--bar_end", type=int, default=5, help="Ending bar number")
-    parser.add_argument("--confidence_about_your_composition", type=int, default=6, help="Confidence level about the composition")
+    parser.add_argument("--bar_end", type=int, default=5 , help="Ending bar number")
+    parser.add_argument("--confidence_about_your_composition", type=int, default=0, help="Confidence level about the composition")
     parser.add_argument("--human_in_the_loop", action='store_true', default=False, help="Include human in the loop processing")
     parser.add_argument("--only_human", action='store_true', default=False, help="Use only human-generated compositions")
 

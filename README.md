@@ -1,5 +1,11 @@
 # RefinPaint: Music Proofreading with RefinPaint
 
+
+
+(Chekpoints were removed because of size constraints but will be available after acceptance)
+
+
+
 ## Abstract
 Autoregressive generative transformers have become key players in music generation, known for their ability to produce coherent compositions. However, they often encounter challenges in human-machine collaboration, an area crucial for creative processes. To address this, we propose **RefinPaint**, an innovative iterative technique designed to enhance the sampling process used in music generation.
 
