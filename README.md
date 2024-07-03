@@ -1,4 +1,4 @@
-# RefinPaint: Music Proofreading with RefinPaint
+# Music Proofreading with RefinPaint
 
 Code and models for: P. Ramoneda<sup>1+</sup>, M. Rocamora<sup>1</sup> & T. Akama<sup>2</sup>, “Music Proofreading with RefinPaint: Where and How to Modify Compositions given Context”, in Proc. of the 25th Int. Society for Music Information Retrieval Conf., San Francisco, USA, 2024.
 <sup>1</sup> Pompeu Fabra University, Barcelona
@@ -8,12 +8,8 @@ Code and models for: P. Ramoneda<sup>1+</sup>, M. Rocamora<sup>1</sup> & T. Akam
 In RefinPaint user selects a MIDI section for enhancement(gray rectangle). Our methodology uses token-level feed-
 back (blue) to highlight critical notes or sequences (red) for regeneration (green). This cycle repeats iteratively.
 
+![TEASER](https://github.com/PRamoneda/RefinPaint/assets/16807496/83cb5ba0-7d15-4fa1-add1-9bfe877c18c7)
 
-<object data="https://github.com/user-attachments/files/16089764/RefinPaint.pdf" type="application/pdf" width="700px" height="700px">
-    <embed src="https://github.com/user-attachments/files/16089764/RefinPaint.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="http://yoursite.com/the.pdf](https://github.com/user-attachments/files/16089764/RefinPaint.pdf">Download PDF</a>.</p>
-    </embed>
-</object>
 
 
 
