@@ -1,8 +1,20 @@
 # RefinPaint: Music Proofreading with RefinPaint
 
+Code and models for: P. Ramoneda<sup>1+</sup>, M. Rocamora<sup>1</sup> & T. Akama<sup>2</sup>, “Music Proofreading with RefinPaint: Where and How to Modify Compositions given Context”, in Proc. of the 25th Int. Society for Music Information Retrieval Conf., San Francisco, USA, 2024.
+<sup>1</sup> Pompeu Fabra University, Barcelona
+<sup>2</sup> Sony Computer Science Laboratories. Tokyo
+<sup>+</sup> Work carried out at Sony CSL, Tokyo
+
+In RefinPaint user selects a MIDI section for enhancement(gray rectangle). Our methodology uses token-level feed-
+back (blue) to highlight critical notes or sequences (red) for regeneration (green). This cycle repeats iteratively.
 
 
-(Chekpoints were removed because of size constraints but will be available after acceptance)
+<object data="https://github.com/user-attachments/files/16089764/RefinPaint.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="https://github.com/user-attachments/files/16089764/RefinPaint.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="http://yoursite.com/the.pdf](https://github.com/user-attachments/files/16089764/RefinPaint.pdf">Download PDF</a>.</p>
+    </embed>
+</object>
+
 
 
 
@@ -78,10 +90,7 @@ For a detailed explanation of each argument, refer to the `parse_arguments` func
 ## Contributing
 We welcome contributions from the community. If you're interested in improving RefinPaint or have suggestions, please follow our contribution guidelines. You can submit pull requests, report bugs, or suggest new features to help us improve this project.
 
-
-## Acknowledgements
-
-The individual contributions remain anonymous for review purposes
+## Citation
 
 ## FAQs
 **Q: Can RefinPaint work with any music genre?**  
@@ -89,3 +98,5 @@ A: Yes, RefinPaint is designed to be genre-agnostic, making it suitable for a wi
 
 **Q: Is technical knowledge in music necessary to use RefinPaint?**  
 A: No, RefinPaint is built to be accessible for users with varying levels of musical and technical expertise.
+
+![sony](https://github.com/PRamoneda/RefinPaint/assets/16807496/d8106222-8ce1-4e95-ad2d-c551551f4d4a) ![mtg](https://github.com/PRamoneda/RefinPaint/assets/16807496/3ebc9341-82ce-4579-81b2-4b03f756c314)
