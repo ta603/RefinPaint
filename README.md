@@ -4,9 +4,9 @@ Code and models for: P. Ramoneda<sup>1+</sup>, M. Rocamora<sup>1</sup> & T. Akam
 
 <sup>1</sup> Pompeu Fabra University, Barcelona
 
-<sup>2</sup> Sony Computer Science Laboratories. Tokyo
+<sup>2</sup> Sony Computer Science Laboratories, Inc. Tokyo
 
-<sup>+</sup> Work carried out at Sony CSL, Tokyo
+<sup>+</sup> Work carried out at Sony Computer Science Laboratories, Inc. Tokyo
 
 
 
