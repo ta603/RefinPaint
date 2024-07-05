@@ -94,5 +94,3 @@ A: Yes, RefinPaint is designed to be genre-agnostic, making it suitable for a wi
 
 **Q: Is technical knowledge in music necessary to use RefinPaint?**  
 A: No, RefinPaint is built to be accessible for users with varying levels of musical and technical expertise.
-
-![sony](https://github.com/PRamoneda/RefinPaint/assets/16807496/d8106222-8ce1-4e95-ad2d-c551551f4d4a) ![mtg](https://github.com/PRamoneda/RefinPaint/assets/16807496/3ebc9341-82ce-4579-81b2-4b03f756c314)
